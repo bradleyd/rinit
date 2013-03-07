@@ -1,0 +1,8 @@
+== RInitd
+
+A gem that provides a *nix init.d script like structure for ruby and non-ruby scripts.
+You can look in examples to see what a ruby init.d script looks like.
+after you put yuor ruby startup script in /etc/init.d, you can add it so it starts on boot.
+update-rc.d {startup script name} defaults
+
+
