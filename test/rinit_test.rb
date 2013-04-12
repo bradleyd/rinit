@@ -3,7 +3,7 @@ require 'tempfile'
 
 class RinitCommandsTest < MiniTest::Unit::TestCase
   
-  extend Rinit::Commands
+  extend Rinit
   def setup
     @rinit = Rinit
     @pidfile = Tempfile.new('tempfile')
@@ -12,8 +12,7 @@ class RinitCommandsTest < MiniTest::Unit::TestCase
   end
 
   def test_get_pid_from_file
-    p Rinit.methods.sort - Object.methods
-    pid = get_pid_from_file @pidfile
+    pid = Rinit.get_pid_from_file @pidfile
     assert_equal pid, "1"
   end
 
