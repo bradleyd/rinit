@@ -1,5 +1,21 @@
 require "rinit/version"
 
 module Rinit
-  # Your code goes here...
+  class << self
+    def start
+      
+    end
+
+    def stop
+      
+    end
+
+    def status
+      
+    end
+
+    def restart
+      
+    end
+  end
 end

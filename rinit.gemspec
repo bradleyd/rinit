@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Rinit::VERSION
   spec.authors       = ["Brad Smith"]
   spec.email         = ["bradleydsmith@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{ Provides init.d script structure for ruby}
+  spec.summary       = %q{ Provides init.d like script structure for ruby}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "minitest"
 end
