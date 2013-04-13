@@ -20,8 +20,8 @@ module Rinit
 
     def stop(pidfile)
       pid = get_pid_from_file(pidfile)
-      p pid
       kill_process(pid)
+      pidfile_cleanup(pidfile)
     end
 
     def status pidfile
@@ -44,7 +44,7 @@ module Rinit
       begin
         pid = IO.readlines(filename)
       rescue Errno::ENONET => e
-        raise "File: #{filename} does not exist, are you sure it is running?"
+        raise Rinit::CommandException, "File: #{filename} does not exist, are you sure it is running?"
       end
       pid[0].to_i
     end
@@ -60,7 +60,7 @@ module Rinit
     
     def kill_process(pid)
       begin
-        Process.kill(9,pid) 
+        Process.kill(9,pid)
       rescue Errno::ESRCH => e
         raise Rinit::CommandException, "The process with pid #{pid} does not seem to be running. 
                                         The pid file may not have been cleaned up properly."
