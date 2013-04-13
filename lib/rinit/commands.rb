@@ -1,6 +1,7 @@
 module Rinit
   class << self
     include ProcessUtils
+
     # @param  opts [Hash] opts :cmd, :chuid, :pidfile
     # @return [nil]
     # @example
@@ -41,6 +42,5 @@ module Rinit
       stop(pidfile)
       start(opts)
     end
-
   end
 end

@@ -1,6 +1,8 @@
 # Rinit
 
-Is a wrapper for using ruby in init scripts.  This only works for Debian based systems.
+Rinit is a `init-like` script witten in ruby.  
+
+### This only works for Debian based systems currently.
 
 ## Installation
 
@@ -18,7 +20,11 @@ Or install it yourself as:
 
 ## Usage
 
-Let's say you have a daemon script called `foodaemon.rb`.  You want to be able to `start, stop, restart, and get the status` of this daemon.  Better yet, you need a pid file so you can use monit to monitor the process.  Create a file in `/etc/init.d/` (or where ever)
+Let's say you have a daemon script called `foodaemon.rb`.  
+You want to be able to `start, stop, restart, and get the status` of said daemon.  
+Better yet, you need a pid file so you can use monit to monitor the process.  
+Create a file in `/etc/init.d/` (or where ever you like).  Name it what you want and make sure it is executable.
+
 ```ruby
 #!/usr/bin/env ruby
 require 'rinit'
