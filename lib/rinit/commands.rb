@@ -4,15 +4,6 @@ module Rinit
   class << self
     include Sys
 
-    def get_pid_from_file(filename)
-      begin
-        pid = IO.readlines(filename).first
-      rescue Errno::ENONET => e
-        raise "File: #{filename} does not exist"
-      end
-      pid.to_i
-    end
-
     # start the ruby daemon
     # @param  opts [Hash] opts :cmd, :chuid, :pidfile
     # #return [nil]
@@ -24,18 +15,20 @@ module Rinit
 
       start_stop_daemon = "start-stop-daemon --start --chuid #{user} --exec #{command}"
       pipe = IO.popen(start_stop_daemon, "r")
-      "Started" if write_pidfile(pipe.pid, pidfile)
+      write_pidfile(pipe.pid, pidfile)
     end
 
     def stop(pidfile)
       pid = get_pid_from_file(pidfile)
+      p pid
       kill_process(pid)
     end
 
-    def status ppid
+    def status pidfile
+      pid = get_pid_from_file(pidfile)
       status = "stopped"
       ProcTable.ps{ |p|
-        if p.pid == ppid
+        if p.pid == pid
           status = "running"
         end
       }
@@ -43,10 +36,20 @@ module Rinit
     end
 
     def restart
-
     end
 
     private
+
+    def get_pid_from_file(filename)
+      begin
+        pid = IO.readlines(filename)
+      rescue Errno::ENONET => e
+        raise "File: #{filename} does not exist, are you sure it is running?"
+      end
+      pid[0].to_i
+    end
+
+
     def pidfile_cleanup pidfile
       begin
         FileUtils.rm(pidfile)
@@ -56,7 +59,12 @@ module Rinit
     end  
     
     def kill_process(pid)
-      Process.kill(9,pid) 
+      begin
+        Process.kill(9,pid) 
+      rescue Errno::ESRCH => e
+        raise Rinit::CommandException, "The process with pid #{pid} does not seem to be running. 
+                                        The pid file may not have been cleaned up properly."
+      end
     end
 
     def write_pidfile(pid, pidfile)

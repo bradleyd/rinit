@@ -35,20 +35,20 @@ class RinitCommandsTest < MiniTest::Unit::TestCase
 
   def test_should_start_daemon
     IO.expects(:popen).returns(OpenStruct.new(pid: 1))
-    File.expects(:open).returns(true)
-    assert_equal(@rinit.start(:cmd => "#{DAEMON}", 
-                              :chuid => USER, 
-                              :pidfile => @pidfile.path), "Started")
+    File.expects(:open).returns(2)
+    assert(@rinit.start(:cmd => "#{DAEMON}", 
+                        :chuid => USER, 
+                        :pidfile => @pidfile.path))
   end
+
+  def test_should_stop_daemon
+    IO.expects(:readlines).returns("1")
+    Process.expects(:kill).with(9,1).returns(true)
+    assert(@rinit.stop(@pidfile.path))
+  end
+
 
   def test_that_respond_to_restart
     assert_respond_to @rinit, :restart
   end
-
-  def test_get_pid_from_file
-    pid = Rinit.get_pid_from_file @pidfile
-    assert_equal pid, 1
-  end
-
-
 end

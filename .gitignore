@@ -13,6 +13,8 @@ pkg
 rdoc
 spec/reports
 test/tmp
+test/foo_daemon.rb
+test/test_init.rb
 test/version_tmp
 tmp
 tags
