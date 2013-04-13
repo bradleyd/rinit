@@ -1,6 +1,6 @@
 # Rinit
 
-TODO: Write a gem description
+Is a wrapper for using ruby in init scripts.  This only works for Debian based systems.
 
 ## Installation
 
@@ -18,7 +18,60 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Let's say you have a daemon script called `foodaemon.rb`.  You want to be able to `start, stop, restart, and get the status` of this daemon.  Better yet, you need a pid file so you can use monit to monitor the process.  Create a file in `/etc/init.d/` (or where ever)
+```ruby
+#!/usr/bin/env ruby
+require 'rinit'
+
+extend Rinit
+# app_name      This is a startup script for use in /etc/init.d
+#
+# description:  This will start, stop, and restart foo daemon
+
+# this is an example of using ruby for a init script
+
+APP_NAME = "foodaemon"
+PIDFILE = "/tmp/#{APP_NAME}.pid"
+PATH = "/home/bradleyd/Projects/rinit/test/"
+DAEMON = "#{PATH}/foo_daemon.rb"
+USER = ENV["USER"]
+
+case ARGV.first
+when 'status'
+  puts "#{APP_NAME} is #{Rinit.status(PIDFILE)}"
+when 'start'
+  Rinit.start :cmd => "#{DAEMON}", 
+              :chuid => USER,
+              :pidfile => PIDFILE
+  puts "#{APP_NAME} is started"
+when 'stop'
+  Rinit.stop(PIDFILE)
+  puts "#{APP_NAME} is stopped" 
+when 'restart'
+  puts "#{APP_NAME} is restarting..."
+  Rinit.restart(PIDFILE, :cmd => "#{DAEMON}",
+                         :chuid => USER,
+                         :pidfile => PIDFILE)
+end
+
+unless %w{start stop restart status}.include? ARGV.first
+  puts "Usage: #{APP_NAME} {start|stop|restart}"
+  exit
+end
+```
+
+Then you can do this
+
+```bash
+./foo status
+foo is stoppped
+```
+
+```bash
+./foo start
+foo is running
+```
+You get the idea...
 
 ## Contributing
 
