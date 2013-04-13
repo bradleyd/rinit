@@ -29,8 +29,8 @@ class RinitCommandsTest < MiniTest::Unit::TestCase
   end
 
   def test_status_should_be_stopped
-    ProcTable.expects(:ps).returns("stopped")   
-    assert_equal @rinit.status(@pidfile.path), "stopped"  
+    ProcTable.expects(:ps).returns(false)   
+    refute(@rinit.status(@pidfile.path))  
   end
 
   def test_should_start_daemon
