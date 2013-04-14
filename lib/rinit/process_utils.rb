@@ -10,7 +10,6 @@ module Rinit
         pid = IO.readlines(filename)
       rescue Errno::ENOENT => e
         puts e.message
-        puts "Are you sure it is running?"
         exit 1
       end
       pid[0].to_i
