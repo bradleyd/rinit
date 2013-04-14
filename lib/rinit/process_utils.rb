@@ -9,7 +9,7 @@ module Rinit
       begin
         pid = IO.readlines(filename)
       rescue Errno::ENOENT => e
-        puts e.message
+        puts e.message + "---Are you sure it is running?"
         exit 1
       end
       pid[0].to_i
@@ -18,9 +18,7 @@ module Rinit
     # @private
     def is_process_running?(pid)
       ProcTable.ps{ |p|
-        if p.pid == pid
-          true
-        end
+          return true if p.pid == pid.to_i
       }
     end
 

@@ -1,3 +1,4 @@
+require "open4"
 module Rinit
   class << self
     include ProcessUtils
@@ -7,15 +8,16 @@ module Rinit
     # @example
     #   {cmd: "/tmp/foo_daemon.rb", chuid: "foo", pidfile: "/tmp/foo.pid"}
     #
+    # @todo 
     def start(opts={})
       command = opts.fetch(:cmd) { raise Rinit::CommandException.new "No command given" }
       user    = opts.fetch(:chuid) { raise Rinit::CommandException.new "No user given" }
       pidfile = opts.fetch(:pidfile) { raise Rinit::CommandException.new "No pidfile was given" }
-
       # @todo this needs to be changed to sys
       start_stop_daemon = "start-stop-daemon --start --chuid #{user} --exec #{command}"
       pipe = IO.popen(start_stop_daemon, "r")
       write_pidfile(pipe.pid, pidfile)
+      pipe
     end
 
     # @param pidfile [String] the full pidfile path

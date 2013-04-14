@@ -6,6 +6,7 @@ require "ostruct"
 class RinitCommandsTest < MiniTest::Unit::TestCase
   extend Rinit
   include Sys
+
   DAEMON = "foo"
   USER   = ENV["USER"]
 
@@ -28,15 +29,19 @@ class RinitCommandsTest < MiniTest::Unit::TestCase
     assert_respond_to @rinit, :status
   end
 
+  def test_that_respond_to_restart
+    assert_respond_to @rinit, :restart
+  end
+
   def test_status_should_be_stopped
-    ProcTable.expects(:ps).returns(false)   
+    ProcTable.expects(:ps).returns(nil)   
     refute(@rinit.status(@pidfile.path))  
   end
 
   def test_should_start_daemon
     IO.expects(:popen).returns(OpenStruct.new(pid: 1))
     File.expects(:open).returns(2)
-    assert(@rinit.start(:cmd => "#{DAEMON}", 
+    assert(@rinit.start(:cmd => DAEMON, 
                         :chuid => USER, 
                         :pidfile => @pidfile.path))
   end
