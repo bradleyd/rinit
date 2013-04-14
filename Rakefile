@@ -1,4 +1,5 @@
 require "bundler/gem_tasks"
+require 'md2man/rakefile'
 
 
 require 'rake/testtask'

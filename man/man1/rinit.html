@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="md2man 1.6.0 https://github.com/sunaku/md2man" />
+  <title>rinit &mdash; init-like script for ruby</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body><div class="navbar"><div class="navbar-inner"><span class="brand"><a href="../index.html#man1">man1</a>/rinit</span></div></div><div class="container-fluid"><div class="manpage"><h1 id="Rinit-1">Rinit 1</h1><h2 id="NAME">NAME</h2><p>rinit - init-like script for ruby</p><h2 id="SYNOPSIS">SYNOPSIS</h2><pre><code>extend Rinit
+</code></pre><h2 id="DESCRIPTION">DESCRIPTION</h2><p><code>rinit</code> is a init-like script for ruby.  You can start and stop your ruby daemon.
+Plus, you get a pid file so you can monitor your daemon.</p><h2 id="OPTIONS">OPTIONS</h2><pre><code>#!/usr/bin/env ruby
+require &#39;rinit&#39;
+
+extend Rinit
+# app_name      This is a startup script for use in /etc/init.d
+#
+# description:  This will start, stop, and restart foo daemon
+
+# this is an example of using ruby for a init script
+
+APP_NAME = &quot;foodaemon&quot;
+PIDFILE = &quot;/tmp/#{APP_NAME}.pid&quot;
+PATH = &quot;/home/bradleyd/Projects/rinit/test/&quot;
+DAEMON = &quot;#{PATH}/foo_daemon.rb&quot;
+USER = ENV[&quot;USER&quot;]
+
+case ARGV.first
+when &#39;status&#39;
+  puts &quot;#{APP_NAME} is #{Rinit.status(PIDFILE)}&quot;
+when &#39;start&#39;
+  Rinit.start :cmd =&gt; &quot;#{DAEMON}&quot;, 
+              :chuid =&gt; USER,
+              :pidfile =&gt; PIDFILE
+  puts &quot;#{APP_NAME} is started&quot;
+when &#39;stop&#39;
+  Rinit.stop(PIDFILE)
+  puts &quot;#{APP_NAME} is stopped&quot; 
+when &#39;restart&#39;
+  puts &quot;#{APP_NAME} is restarting...&quot;
+  Rinit.restart(PIDFILE, :cmd =&gt; &quot;#{DAEMON}&quot;,
+                         :chuid =&gt; USER,
+                         :pidfile =&gt; PIDFILE)
+end
+
+unless %w{start stop restart status}.include? ARGV.first
+  puts &quot;Usage: #{APP_NAME} {start|stop|restart}&quot;
+  exit
+end
+</code></pre><h2 id="FILES">FILES</h2><h2 id="ENVIRONMENT">ENVIRONMENT</h2><h2 id="DIAGNOSTICS">DIAGNOSTICS</h2><h2 id="BUGS">BUGS</h2><p>probably some.</p><h2 id="AUTHOR">AUTHOR</h2><p>Bradley Smith <a href="mailto:bradleydsmith@gmail.com">bradleydsmith@gmail.com</a></p><h2 id="SEE-ALSO">SEE ALSO</h2><p><a class="manpage-reference">rinit(1)</a> [Linux Man Page Howto]</p></div></div></body>
+</html>
