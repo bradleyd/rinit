@@ -25,6 +25,16 @@ You want to be able to `start, stop, restart, and get the status` of said daemon
 Better yet, you need a pid file so you can use monit to monitor the process.  
 Create a file in `/etc/init.d/` (or where ever you like).  Name it what you want and make sure it is executable.
 
+### your awesome damon script
+```ruby
+loop do
+  puts "I am a daemon...and I loop loop loop and I loop loop loop!"
+  sleep 10
+end
+```
+
+### a init script to control said awesomeness
+
 ```ruby
 #!/usr/bin/env ruby
 require 'rinit'

@@ -6,10 +6,10 @@ require 'rinit/version'
 Gem::Specification.new do |spec|
   spec.name          = "rinit"
   spec.version       = Rinit::VERSION
-  spec.authors       = ["Brad Smith"]
+  spec.authors       = ["Bradley Smith"]
   spec.email         = ["bradleydsmith@gmail.com"]
-  spec.description   = %q{ Provides init.d script structure for ruby}
-  spec.summary       = %q{ Provides init.d like script structure for ruby}
+  spec.description   = %q{ Provides init-like script structure for ruby}
+  spec.summary       = %q{ Provides init-like script structure for ruby so you can control your daemons. }
   spec.homepage      = ""
   spec.license       = "MIT"
 
