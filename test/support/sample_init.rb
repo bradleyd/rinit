@@ -11,7 +11,7 @@ extend Rinit
 
 APP_NAME = "Foodaemon"
 PIDFILE = "/tmp/#{APP_NAME}.pid"
-PATH = "/home/bradleyd/Projects/rinit/test/support"
+PATH = File.expand_path File.dirname(__FILE__)
 DAEMON = File.join(PATH, "foo_daemon.rb")
 USER = ENV["USER"]
 
@@ -23,7 +23,6 @@ when "start"
                        chuid: USER,
                        pidfile: PIDFILE)
  
-  #puts (result.exitstatus == 0 ? "#{APP_NAME} is started" : "#{APP_NAME} is not running; returned #{result.exitstatus}")
 when "stop"
   Rinit.stop(PIDFILE)
   puts "#{APP_NAME} is stopped"

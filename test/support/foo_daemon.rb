@@ -4,4 +4,5 @@
 loop do 
  File.open("/tmp/looper", "a+") { |f| f.write "loop de do!!" }
  sleep 10
+ exit
 end
