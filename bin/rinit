@@ -35,6 +35,6 @@ if options.empty?
 end
 
 require 'fileutils'
-
-FileUtils.cp '../test/support/sample_init.rb', options.fetch(:template) { 'sample_init'}
+p File.expand_path(File.dirname(__FILE__), __FILE__)
+FileUtils.cp File.join(File.expand_path(File.dirname(__FILE__), __FILE__), '../test/support/sample_init.rb'), options.fetch(:template) { 'sample_init'}
 
