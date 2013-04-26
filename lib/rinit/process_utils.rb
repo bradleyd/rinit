@@ -4,6 +4,26 @@ require "fileutils"
 module Rinit
   module ProcessUtils
     include Sys
+
+    def may_the_fork_be_with_you(command, pidfile)
+      rd, wr = IO.pipe
+      pid = fork do
+        rd.close
+        begin
+          exec(command)
+        rescue SystemCallError
+          wr.write('!')
+          exit 1
+        end
+      end
+      wr.close
+      command_result = if rd.eof?
+                         write_pidfile(pid, pidfile)
+                       else
+                         nil
+                       end
+    end
+
     # @private 
     def get_pid_from_file(filename)
       begin
@@ -12,13 +32,19 @@ module Rinit
         puts e.message + "---Are you sure it is running?"
         exit 1
       end
-      pid[0].to_i
+      # if the file is there but no pid was written to_i returns 0
+      pid.empty? ? -1 : pid[0].to_i
     end
 
     # @private
-    def is_process_running?(pid)
+    def is_process_running?(pidfile)
+      pid = get_pid_from_file(pidfile)
       ProcTable.ps{ |p|
-          return true if p.pid == pid.to_i
+       if p.pid == pid.to_i
+         return true
+       else
+         return false
+       end
       }
     end
 
@@ -33,7 +59,10 @@ module Rinit
     end  
     
     # @private 
-    def kill_process(pid)
+    def kill_process(pidfile)
+      pid = get_pid_from_file(pidfile)
+      # should never be negative unless there is an issue with writing the pid
+      return if pid < 0
       begin
         Process.kill(9,pid)
       rescue Errno::ESRCH => e
