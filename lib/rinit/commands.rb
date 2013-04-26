@@ -1,4 +1,5 @@
 require "open4"
+require "shelltastic"
 module Rinit
   class << self
     include ProcessUtils
@@ -14,10 +15,28 @@ module Rinit
       user    = opts.fetch(:chuid) { raise Rinit::CommandException.new "No user given" }
       pidfile = opts.fetch(:pidfile) { raise Rinit::CommandException.new "No pidfile was given" }
       # @todo this needs to be changed to forked then pid file written to be more portable
-      start_stop_daemon = "start-stop-daemon --start --chuid #{user} --exec #{command} -b"
-      pipe = IO.popen(start_stop_daemon, "r")
-      write_pidfile(pipe.pid, pidfile)
-      pipe
+      #start_stop_daemon = "start-stop-daemon --start --chuid #{user} --exec #{command} -b"
+      #pipe = IO.popen(start_stop_daemon, "r")
+      #pipe = ::ShellTastic::Command.run(start_stop_daemon).first
+      rd, wr = IO.pipe
+      pid = fork do
+        rd.close
+        begin
+          exec(command)
+        rescue SystemCallError
+          wr.write('.')
+          exit 1
+        end
+      end
+      wr.close
+      p pid
+      res = if rd.eof?
+      #write_pidfile(pipe.pid, pidfile)
+              write_pidfile(pid, pidfile)
+            else
+              nil
+            end
+      res
     end
 
     # @param pidfile [String] the full pidfile path

@@ -23,6 +23,7 @@ when "start"
                        chuid: USER,
                        pidfile: PIDFILE)
  
+  puts "#{APP_NAME} has started" unless result.nil?
 when "stop"
   Rinit.stop(PIDFILE)
   puts "#{APP_NAME} is stopped"
