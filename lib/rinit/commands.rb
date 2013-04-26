@@ -13,23 +13,6 @@ module Rinit
       command = opts.fetch(:cmd) { raise Rinit::CommandException.new "No command given" }
       user    = opts.fetch(:chuid) { raise Rinit::CommandException.new "No user given" }
       pidfile = opts.fetch(:pidfile) { raise Rinit::CommandException.new "No pidfile was given" }
-      #rd, wr = IO.pipe
-      #pid = fork do
-        #rd.close
-        #begin
-          #exec(command)
-        #rescue SystemCallError
-          #wr.write('!')
-          #exit 1
-        #end
-      #end
-      #wr.close
-      #res = if rd.eof?
-              #write_pidfile(pid, pidfile)
-            #else
-              #nil
-            #end
-      #res
       may_the_fork_be_with_you(command, pidfile)
     end
 

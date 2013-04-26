@@ -5,6 +5,7 @@ module Rinit
   module ProcessUtils
     include Sys
 
+    # @private
     def may_the_fork_be_with_you(command, pidfile)
       rd, wr = IO.pipe
       pid = fork do
@@ -39,13 +40,10 @@ module Rinit
     # @private
     def is_process_running?(pidfile)
       pid = get_pid_from_file(pidfile)
-      ProcTable.ps{ |p|
-       if p.pid == pid.to_i
-         return true
-       else
-         return false
-       end
+      ProcTable.ps{ |process|
+       return true if process.pid == pid
       }
+      false
     end
 
     # @private 

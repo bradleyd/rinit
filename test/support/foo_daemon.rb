@@ -3,6 +3,6 @@
 
 loop do 
  File.open("/tmp/looper", "a+") { |f| f.write "loop de do!!" }
- sleep 30
+ sleep 60
  exit
 end
