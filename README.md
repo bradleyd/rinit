@@ -56,10 +56,11 @@ case ARGV.first
 when 'status'
   puts "#{APP_NAME} is #{Rinit.status(PIDFILE)}"
 when 'start'
-  Rinit.start :cmd => "#{DAEMON}", 
-              :chuid => USER,
-              :pidfile => PIDFILE
-  puts "#{APP_NAME} is started"
+  result = Rinit.start :cmd => "#{DAEMON}", 
+                       :chuid => USER,
+                       :pidfile => PIDFILE
+
+  puts "#{APP_NAME} is started" unless result.nil?
 when 'stop'
   Rinit.stop(PIDFILE)
   puts "#{APP_NAME} is stopped" 
@@ -89,6 +90,27 @@ foo is running
 ```
 You get the idea...
 
+### Simple Template Builder
+
+`rinit` also has a simple template builder.  For example,
+to generate a init script to be used in `init.d/` one could do this
+
+* only monit and init templates are supported as of now
+
+```ruby
+    -t, --template type              generator for init template
+    -n, --daemon-name name           name of the dameon
+    -h, --help                       Show this message
+```
+
+```ruby
+rinit -t init -n foobar
+```
+
+This will create a file in the current directory where you ran `rinit`
+
+* your milage may vary
+ 
 ## Contributing
 
 1. Fork it
