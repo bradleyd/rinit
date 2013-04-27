@@ -1,5 +1,4 @@
 require "open4"
-require "shelltastic"
 module Rinit
   class << self
     include ProcessUtils
