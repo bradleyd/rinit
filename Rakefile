@@ -6,11 +6,11 @@ require 'spec/rake/spectask'
 
 spec = Gem::Specification.new do |s|
   s.name = "init_d"
-  s.version = "0.0.1"
-  s.author = "brad Smith"
-  s.email = "brad.smith@fullspectrum.net"
+  s.version = "0.0.5"
+  s.author = "Bradley Smith"
+  s.email = "bradleydsmith@gmail.com"
   s.homepage = "http://example.com"
-  s.description = s.summary = "A gem that provides init.d type structure for ruby startup scripts"
+  s.description = s.summary = "A gem that provides init-like structure for ruby startup scripts"
   
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
@@ -48,4 +48,13 @@ task :make_spec do
   File.open("#{GEM}.gemspec", "w") do |file|
     file.puts spec.to_ruby
   end
+require "bundler/gem_tasks"
+
+
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.libs.push "lib"
+  t.test_files = FileList['test/*_test.rb']
+  t.verbose = true
 end
