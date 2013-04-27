@@ -5,14 +5,16 @@ extend Rinit
 
 # app_name      This is a startup script for use in /etc/init.d
 #
-# description:  This will start, stop, and restart foo daemon
+# description:  This will start, stop, and restart <%= @name %>
 
 # this is an example of using ruby for a init script
 
 APP_NAME = <%= @name %>
 PIDFILE = "/tmp/#{APP_NAME}.pid"
+# change PATH to point at your daemon path
 PATH = File.expand_path File.dirname(__FILE__)
 DAEMON = File.join(PATH, <%= @name %>)
+# @todo change this to the user you want the daemon to run as
 USER = ENV["USER"]
 
 case ARGV.first
@@ -38,4 +40,3 @@ unless %w{start stop restart status}.include? ARGV.first
   puts "Usage: #{APP_NAME} {start|stop|restart}"
   exit
 end
-
