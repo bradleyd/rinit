@@ -1,8 +1,0 @@
-check process callflow
-   with pidfile /var/run/callflow.pid
-   start program = "/etc/init.d/callflow start"
-   stop program = "/etc/init.d/callflow stop"
-   if cpu > 60% for 2 cycles then alert
-   if failed host 127.0.0.1 port 3000 protocol http
-       then alert
-
