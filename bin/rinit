@@ -38,5 +38,5 @@ if options.empty?
   exit
 end
 
-template = Rinit::TemplateBuilder.new(options.fetch(:template), options.fetch(:name))
+template = Rinit::TemplateBuilder.new(options)
 template.build
