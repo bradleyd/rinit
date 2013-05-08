@@ -1,5 +1,7 @@
 # Rinit
 
+[![Code Climate](https://codeclimate.com/github/bradleyd/rinit.png)](https://codeclimate.com/github/bradleyd/rinit)
+
 Rinit is a `init-like` script witten in ruby.  
 
 ### This only works for Debian based systems currently.
